@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>База данных людей</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-container { background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #4CAF50; color: white; }
+        .btn { padding: 8px 16px; margin: 5px; text-decoration: none; border-radius: 4px; }
+        .btn-add { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        .btn-delete { background-color: #f44336; color: white; }
+    </style>
+</head>
+<body>
+    <h1>База данных людей</h1>
+    
+    <div class="form-container">
+        <h2>Добавить нового человека</h2>
+        <form th:action="@{/add}" th:object="${newPerson}" method="post">
+            <p>
+                <label>Имя:</label><br>
+                <input type="text" th:field="*{name}" required style="padding: 8px; width: 200px;">
+            </p>
+            <p>
+                <label>Телефон:</label><br>
+                <input type="text" th:field="*{phone}" required style="padding: 8px; width: 200px;">
+            </p>
+            <p>
+                <button type="submit" class="btn btn-add">Добавить</button>
+            </p>
+        </form>
+    </div>
+    
+    <h2>Все люди</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Действия</th>
+        </tr>
+        <tr th:each="person : ${persons}">
+            <td th:text="${person.id}"></td>
+            <td th:text="${person.name}"></td>
+            <td th:text="${person.phone}"></td>
+            <td>
+                <a th:href="@{/delete/{id}(id=${person.id})}" class="btn btn-delete" 
+                   onclick="return confirm('Удалить?')">Удалить</a>
+            </td>
+        </tr>
+    </table>
+    
+    <div th:if="${#lists.isEmpty(persons)}">
+        <p><em>Пока никого нет в базе</em></p>
+    </div>
+</body>
+</html>
